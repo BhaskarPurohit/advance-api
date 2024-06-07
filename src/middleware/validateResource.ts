@@ -1,17 +1,19 @@
-//when req comes in, we will provide a schema and the request will be validated against that schema
-import { Request, Response, NextFunction } from "express"
-import {AnyZodObject} from 'zod'
-const validate = (schema: AnyZodObject)=> (req:Request , res:Response , next:NextFunction)=>{ //curried funciton
-    try{
-        schema.parse({
-            //creating schema to validate
-            body: req.body,
-            query: req.query,
-            params: req.params
-        })
-    }catch(e:any){
-        return res.status(400).send(e.errors)
-    }
-}
+import { Request, Response, NextFunction } from "express";
+import { AnyZodObject } from "zod";
 
-export default validate
+const validate =
+  (schema: AnyZodObject) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    try {
+      schema.parse({
+        body: req.body,
+        query: req.query,
+        params: req.params,
+      });
+      next();
+    } catch (e: any) {
+      return res.status(400).send(e.errors);
+    }
+  };
+
+export default validate;
